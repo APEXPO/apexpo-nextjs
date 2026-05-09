@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-apex-bg: #020617;
+  --color-apex-surface: #0a1628;
+  --color-apex-cyan: #22d3ee;
+  --color-apex-purple: #a855f7;
+  --color-apex-text: #f0f9ff;
+  --color-apex-muted: #94a3b8;
+}
+
+body {
+  background-color: var(--color-apex-bg);
+  color: var(--color-apex-text);
+}
