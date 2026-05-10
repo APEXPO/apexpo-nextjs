@@ -1,3 +1,6 @@
+# Local Vite sandbox; was tracked as a broken submodule (missing .gitmodules URL).
+apexpo-v5/
+
 /node_modules
 /.next/
 /out/
