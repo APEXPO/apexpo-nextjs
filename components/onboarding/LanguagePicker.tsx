@@ -8,6 +8,7 @@ import ApexpoLogo from "@/components/ApexpoLogo";
 import CodeRain from "@/components/CodeRain";
 import MarketingLanding from "@/components/landing/MarketingLanding";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
+import { persistLocaleToProfile } from "@/lib/supabase/persistLocale";
 import LanguageCard, { type LanguageOption } from "./LanguageCard";
 
 type LanguagePickerRow =
@@ -135,11 +136,26 @@ export default function LanguagePicker() {
     if (href) router.push(href);
   }, [router]);
 
-  const handleSelect = useCallback((code: string) => {
+  const handleSelect = useCallback(async (code: string) => {
     if (selectionLockRef.current || pendingHrefRef.current) return;
     selectionLockRef.current = true;
 
     persistLanguage(code);
+
+    const supabase = createBrowserSupabaseClient();
+    if (supabase) {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        if (session?.user) {
+          await persistLocaleToProfile(supabase, session.user.id, code);
+        }
+      } catch {
+        // Local persist already succeeded; Supabase is best-effort until DB migration is applied.
+      }
+    }
+
     setSelectedCode(code);
     setSelectingCode(code);
 
@@ -161,7 +177,7 @@ export default function LanguagePicker() {
       <div className="absolute inset-0 z-0 h-full w-full">
         <CodeRain opacity={0.65} />
       </div>
-      <MarketingLanding showCodeRain={false} />
+      <MarketingLanding showCodeRain={false} showLanguageOverlay={false} />
     </div>
   );
 
