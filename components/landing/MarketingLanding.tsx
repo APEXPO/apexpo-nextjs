@@ -12,6 +12,7 @@ const LANG_BUTTONS = [
   { code: "cs", label: "CS" },
   { code: "de", label: "DE" },
   { code: "pl", label: "PL" },
+
   { code: "es", label: "ES" },
 ] as const;
 
@@ -89,7 +90,20 @@ export default function MarketingLanding({
   const langBadge =
     language?.trim() || readStoredLang()?.trim() || "en";
 
-  return (
+  return ({showLanguageOverlay && (
+  <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(2,6,23,0.96)",backdropFilter:"blur(28px)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+    <h1 style={{color:"#f0f9ff",fontSize:"36px",fontWeight:"800",marginBottom:"8px"}}>Vyberte jazyk</h1>
+    <p style={{color:"#94a3b8",marginBottom:"40px"}}>Vyberte jazyk · Sprache wählen · Wybierz język</p>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"16px",maxWidth:"500px",width:"100%",padding:"0 20px"}}>
+      {[{code:"en",flag:"🇬🇧",label:"English"},{code:"cs",flag:"🇨🇿",label:"Čeština"},{code:"de",flag:"🇩🇪",label:"Deutsch"},{code:"pl",flag:"🇵🇱",label:"Polski"},{code:"es",flag:"🇪🇸",label:"Español"}].map(l=>(
+        <button key={l.code} onClick={()=>{localStorage.setItem("apexpo_language",l.code);setShowLanguageOverlay(false);}} style={{background:"rgba(10,22,40,0.8)",border:"1.5px solid rgba(34,211,238,0.2)",borderRadius:"14px",padding:"20px",color:"#f0f9ff",fontSize:"18px",fontWeight:"700",cursor:"pointer"}}>
+          {l.flag} {l.label}
+        </button>
+      ))}
+    </div>
+  </div>
+)}
+
     <>
       {showOverlay ? (
         <div
